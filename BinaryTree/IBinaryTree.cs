@@ -6,6 +6,6 @@ namespace BinaryTrees {
         void Insert(int i);
         bool Search(int i);
         bool Remove(int i);
-        void Print();
+        string Print();
     }
 }

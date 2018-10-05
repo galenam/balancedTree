@@ -21,10 +21,23 @@ namespace BinaryTrees {
 
         public bool Remove(int i) => throw new NotImplementedException();
 
-        public void Print()
+        public string Print()
         {
-
+            if (Root == null) return null;
+            return PrintInner(Root)?.Trim();
         }
+
+        string PrintInner(Node node)
+        {
+            if (node == null) return string.Empty;
+            var result = $"{node.Value} ";
+            if (node.Left != null)
+                result += PrintInner(node.Left);
+            if (node.Right != null)
+                result += PrintInner(node.Right);
+            return result;
+        }
+
 
         Node Insert(Node node, int i) {
             if (node == null)
