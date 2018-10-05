@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BinaryTree {
+namespace BinaryTrees {
     class Program {
         static void Main(string[] args) {
             Console.WriteLine("Hello World!");
