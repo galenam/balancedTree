@@ -100,12 +100,15 @@ namespace BinaryTrees {
         Node RotateLeftLeft(Node node)
         {
             if (node == null) return null;
+            var lostValue = node.Left.Right?.Value;
             node.Left.Right = node;
             node.Left.Parent = node.Parent;
             node.Parent = node.Left;
             node = node.Left;
             node.Right.Left = null;
+            node.Right.Left = lostValue.HasValue ? new Node { Value = lostValue.Value, Height = 1, Parent = node.Right } : null;
             node.Right.Height = GetHeight(node.Right);
+            node.Left.Height = GetHeight(node.Left);
             node.Height = GetHeight(node);
             return node;
         }
@@ -151,7 +154,6 @@ namespace BinaryTrees {
             node.Left.Right.Parent = node.Left.Parent;
             node.Left.Parent = node.Left.Right;
             node.Left = node.Left.Right;
-            node.Left.Right = null;
             node.Left.Left.Right = null;
             node.Left.Left.Height = GetHeight(node.Left.Left);
             node.Left.Height = GetHeight(node.Left);
