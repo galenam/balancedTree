@@ -9,8 +9,8 @@ namespace TestProject {
         // todo : check duplicates in code
         readonly List<Tuple<List<int>, string>> _sourceResult = new List<Tuple<List<int>, string>>
         {
-            //new Tuple<List<int>, string>(new List<int> {6, 2, 3, 4, 5, 8, 1, 7}, "5 3 2 1 4 7 6 8" ),
-            new Tuple<List<int>, string>(new List<int> {5,9,11,4,1,7,12,20, 2, 8, 17, 15,3, 19,18, 14, 16  }, "5 3 2 1 4 7 6 8" )
+            new Tuple<List<int>, string>(new List<int> {6, 2, 3, 4, 5, 8, 1, 7}, "5 3 2 1 4 7 6 8" ),
+            new Tuple<List<int>, string>(new List<int> {5,9,11,4,1,7,12,20, 2, 8, 17, 15,3, 19,18, 14, 16  }, "9 5 2 1 4 3 7 8 17 12 11 15 14 16 19 18 20")
         };
 
         [Fact]
