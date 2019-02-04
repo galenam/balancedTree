@@ -1,17 +1,19 @@
 ﻿using System;
 
-namespace BinaryTrees {
+namespace BinaryTrees
+{
     /// <summary>
     /// https://www.niisi.ru/iont/projects/rfbr/90308/90308_miphi6.php - text description
     /// </summary>
-    public class BinaryTree : IBinaryTree {
+    public class BinaryTree : IBinaryTree
+    {
         public Node Root { get; set; }
 
         public void Insert(int i)
         {
             if (Root == null)
             {
-                Root = new Node {Value = i, Height = 1};
+                Root = new Node { Value = i, Height = 1 };
                 return;
             }
             Root = Insert(Root, i);
@@ -39,12 +41,15 @@ namespace BinaryTrees {
         }
 
 
-        Node Insert(Node node, int i) {
+        Node Insert(Node node, int i)
+        {
             if (node == null)
                 return null;
-            if (node.Value <= i) {
-                if (node.Right == null) {
-                    node.Right = new Node { Value = i, Height = 1, Parent = node};
+            if (node.Value <= i)
+            {
+                if (node.Right == null)
+                {
+                    node.Right = new Node { Value = i, Height = 1, Parent = node };
                     node.Height = GetHeight(node);
                     return node;
                 }
@@ -53,7 +58,8 @@ namespace BinaryTrees {
                 return Rotate(node);
             }
 
-            if (node.Left == null) {
+            if (node.Left == null)
+            {
                 node.Left = new Node { Value = i, Height = 1, Parent = node };
                 node.Height = GetHeight(node);
                 return node;
@@ -132,7 +138,7 @@ namespace BinaryTrees {
 
             node.Right.Parent = node;
             node.Left.Parent = node;
-            
+
             node.Right.Height = GetHeight(node.Right);
             node.Left.Height = GetHeight(node.Left);
             node.Height = GetHeight(node);
@@ -149,11 +155,14 @@ namespace BinaryTrees {
         /// <param name="node"></param>
         Node RotateLeftRight(Node node)
         {
+            var lostValue = node.Left.Right.Left;
+
+
             node.Left.Right.Left = node.Left;
             node.Left.Right.Parent = node.Left.Parent;
             node.Left.Parent = node.Left.Right;
             node.Left = node.Left.Right;
-            node.Left.Left.Right = null;
+            node.Left.Left.Right = lostValue;
             node.Left.Left.Height = GetHeight(node.Left.Left);
             node.Left.Height = GetHeight(node.Left);
             return RotateLeftLeft(node);
@@ -168,11 +177,16 @@ namespace BinaryTrees {
         /// </summary>
         /// <param name="node"></param>
         Node RotateRightLeft(Node node)
-        {
+        {// 83
+            if (node == null) { return null; }
+            var lostValue = node.Right.Left.Right;
+
+
+
             node.Right.Left.Right = node.Right;
             node.Right.Left.Parent = node.Right.Parent;
             node.Right = node.Right.Left;
-            node.Right.Right.Left = null;
+            node.Right.Right.Left = lostValue;
             node.Right.Right.Parent = node.Right;
             node.Right.Right.Height = GetHeight(node.Right.Right);
             node.Right.Height = GetHeight(node.Right);
