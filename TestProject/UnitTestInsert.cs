@@ -6,9 +6,8 @@ using NUnit.Framework;
 
 namespace TestProject
 {
-    public class UnitTest1
+    public class UnitTestInsert
     {
-        // todo : check duplicates in code
         static List<Tuple<List<int>, string>> _sourceResult = new List<Tuple<List<int>, string>>
         {
             new Tuple<List<int>, string>(new List<int> {6, 2, 3, 4, 5, 8, 1, 7}, "5 3 2 1 4 7 6 8" ),

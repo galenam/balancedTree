@@ -21,7 +21,20 @@ namespace BinaryTrees
             Root = Insert(Root, i);
         }
 
-        public bool Search(int i) => throw new NotImplementedException();
+        public bool Search(int i)
+        {
+            if (Root == null) return false;
+            if (Root.Value == i) return true;
+            if (Root.Value <= i) return SearchInner(Root.Right, i);
+            return SearchInner(Root.Left, i);
+        }
+        private bool SearchInner(Node node, int i)
+        {
+            if (node == null) return false;
+            if (node.Value == i) return true;
+            if (node.Value <= i) return SearchInner(node.Right, i);
+            return SearchInner(node.Left, i);
+        }
 
         public bool Remove(int i) => throw new NotImplementedException();
 
