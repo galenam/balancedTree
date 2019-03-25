@@ -2,7 +2,7 @@
 
 namespace BinaryTrees
 {
-    //todo : реализация нереализованных методов : remove, search
+    //todo : реализация нереализованных методов : remove
 
     /// <summary>
     /// https://www.niisi.ru/iont/projects/rfbr/90308/90308_miphi6.php - text description
@@ -23,20 +23,97 @@ namespace BinaryTrees
 
         public bool Search(int i)
         {
-            if (Root == null) return false;
-            if (Root.Value == i) return true;
-            if (Root.Value <= i) return SearchInner(Root.Right, i);
-            return SearchInner(Root.Left, i);
+            return SearchInner(Root, i) != null;
         }
-        private bool SearchInner(Node node, int i)
+        private Node SearchInner(Node node, int i)
         {
-            if (node == null) return false;
-            if (node.Value == i) return true;
-            if (node.Value <= i) return SearchInner(node.Right, i);
-            return SearchInner(node.Left, i);
+            if (node == null) return null;
+            if (node.Value == i) return node;
+            var nodeChoose = node.Value <= i ? node.Right : node.Left;
+            return SearchInner(nodeChoose, i);
         }
 
-        public bool Remove(int i) => throw new NotImplementedException();
+        public bool Remove(int i)
+        {
+            if (Root == null) return false;
+            var searchedNode = SearchInner(Root, i);
+            if (searchedNode == null) return false;
+            var parent = searchedNode.Parent;
+
+            // удаление листа
+            if (searchedNode != null && searchedNode.Left == null && searchedNode.Right == null)
+            {
+                if (parent.Value <= searchedNode.Value) { parent.Right = null; }
+                else
+                {
+                    parent.Left = null;
+                }
+                parent = Rotate(parent);
+                parent.Height = GetHeight(parent);
+                var parentParent = parent.Parent;
+                if (parentParent.Value <= parent.Value) { parentParent.Right = parent; }
+                else { parentParent.Left = parent; }
+                var newHeight = GetHeight(parentParent);
+                if (newHeight == parentParent.Height) return true;
+
+
+
+                while (newHeight != parentParent.Height)
+                {
+                    parentParent.Height = newHeight;
+                    if (parentParent.Parent == null) break;
+                    parentParent = parentParent.Parent;
+                    newHeight = GetHeight(parentParent);
+                }
+                return true;
+            }
+
+            if (searchedNode != null && searchedNode.Right == null)
+            {
+                if (parent.Value <= searchedNode.Value) { parent.Right = searchedNode.Left; }
+                else
+                {
+                    parent.Left = searchedNode.Left;
+                }
+                parent = Rotate(parent);
+                return true;
+            }
+
+            var minInRightSubTree = FindMinInLeftSubTree(searchedNode.Right);
+            if (minInRightSubTree.Right != null && minInRightSubTree.Parent != null)
+            {
+                minInRightSubTree.Parent.Right = minInRightSubTree.Right;
+                minInRightSubTree.Right.Parent = minInRightSubTree.Parent;
+            }
+            else if (minInRightSubTree.Right == null)
+            {
+                if (minInRightSubTree.Parent.Value <= minInRightSubTree.Value) { minInRightSubTree.Parent.Right = null; }
+                else
+                {
+                    minInRightSubTree.Parent.Left = null;
+                }
+            }
+
+            searchedNode.Value = minInRightSubTree.Value;
+
+            searchedNode = Rotate(searchedNode);
+            minInRightSubTree = null;
+            if (parent == null)
+            {
+                Root = searchedNode;
+                return true;
+            }
+            if (parent.Value <= searchedNode.Value) { parent.Right = searchedNode; }
+            else { parent.Left = searchedNode; }
+            parent.Height = GetHeight(parent);
+            return true;
+        }
+
+        private Node FindMinInLeftSubTree(Node node)
+        {
+            if (node == null || node.Left == null) return node;
+            return FindMinInLeftSubTree(node.Left);
+        }
 
         public string Print()
         {
@@ -111,12 +188,12 @@ namespace BinaryTrees
         }
 
         /// <summary>
-        ///                     C                         
+        ///                     C
         ///                    /
         ///                   B            ->                 B
         ///                  /                              /   \
         ///                 A                              A     C
-        /// </summary> 
+        /// </summary>
         /// <param name="node"></param>
         Node RotateLeftLeft(Node node)
         {
@@ -150,6 +227,10 @@ namespace BinaryTrees
             node.Right.Parent = node.Parent;
             node = node.Right;
             node.Left.Right = lostValue;
+            if (node.Left.Right != null)
+            {
+                node.Left.Right.Parent = node.Left;
+            }
 
             node.Right.Parent = node;
             node.Left.Parent = node;
@@ -161,9 +242,9 @@ namespace BinaryTrees
         }
 
         /// <summary>
-        ///      C                              C                       
+        ///      C                              C
         ///     /                              /
-        ///    A            ->                B            ->           B    
+        ///    A            ->                B            ->           B
         ///     \                            /                         / \
         ///      B                          A                         A   C
         /// </summary>
