@@ -21,7 +21,7 @@ namespace TestProject
             }
         }
 
-        //    /*
+
         [TestCase(6, true, "5 3 2 1 4 7 8")]
         [TestCase(12, false, "5 3 2 1 4 7 6 8")]
         [TestCase(2, true, "5 3 1 4 7 6 8")]
@@ -29,16 +29,11 @@ namespace TestProject
         [TestCase(5, true, "6 3 2 1 4 7 8")]
         [TestCase(56, false, "5 3 2 1 4 7 6 8")]
         [TestCase(3, true, "5 2 1 4 7 6 8")]
-
         [TestCase(8, true, "5 3 2 1 4 7 6")]
-        //   */
         [TestCase(1, true, "5 3 2 4 7 6 8")]
-        /* 
-                 [TestCase(7, true, "")] */
+        [TestCase(7, true, "5 3 2 1 4 8 6")]
         public void Test1(int removedValue, bool removingResult, string printedBTree)
         {
-            // неверная высота у узла 5 (по-старому 4, а должна быть 3, 
-            // т.к. самый длинный путь укоротился на 1 узел после удаления узла 1)
             var result = BTree.Remove(removedValue);
             Assert.AreEqual(result, removingResult);
             Assert.AreEqual(BTree.Print(), printedBTree);

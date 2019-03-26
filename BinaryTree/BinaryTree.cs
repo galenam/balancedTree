@@ -2,8 +2,6 @@
 
 namespace BinaryTrees
 {
-    //todo : реализация нереализованных методов : remove
-
     /// <summary>
     /// https://www.niisi.ru/iont/projects/rfbr/90308/90308_miphi6.php - text description
     /// </summary>
