@@ -41,20 +41,14 @@ namespace BinaryTrees
             // удаление листа
             if (searchedNode != null && searchedNode.Left == null && searchedNode.Right == null)
             {
-                if (parent.Value <= searchedNode.Value) { parent.Right = null; }
-                else
-                {
-                    parent.Left = null;
-                }
+                parent = ReplaceParent(parent, searchedNode.Value, null);
                 parent = Rotate(parent);
                 parent.Height = GetHeight(parent);
+
+                parent.Parent = ReplaceParent(parent.Parent, parent.Value, parent);
                 var parentParent = parent.Parent;
-                if (parentParent.Value <= parent.Value) { parentParent.Right = parent; }
-                else { parentParent.Left = parent; }
                 var newHeight = GetHeight(parentParent);
                 if (newHeight == parentParent.Height) return true;
-
-
 
                 while (newHeight != parentParent.Height)
                 {
@@ -68,11 +62,7 @@ namespace BinaryTrees
 
             if (searchedNode != null && searchedNode.Right == null)
             {
-                if (parent.Value <= searchedNode.Value) { parent.Right = searchedNode.Left; }
-                else
-                {
-                    parent.Left = searchedNode.Left;
-                }
+                parent = ReplaceParent(parent, searchedNode.Value, searchedNode.Left);
                 parent = Rotate(parent);
                 return true;
             }
@@ -85,11 +75,7 @@ namespace BinaryTrees
             }
             else if (minInRightSubTree.Right == null)
             {
-                if (minInRightSubTree.Parent.Value <= minInRightSubTree.Value) { minInRightSubTree.Parent.Right = null; }
-                else
-                {
-                    minInRightSubTree.Parent.Left = null;
-                }
+                minInRightSubTree.Parent = ReplaceParent(minInRightSubTree.Parent, minInRightSubTree.Value, null);
             }
 
             searchedNode.Value = minInRightSubTree.Value;
@@ -101,10 +87,26 @@ namespace BinaryTrees
                 Root = searchedNode;
                 return true;
             }
-            if (parent.Value <= searchedNode.Value) { parent.Right = searchedNode; }
-            else { parent.Left = searchedNode; }
+            parent = ReplaceParent(parent, searchedNode.Value, searchedNode);
             parent.Height = GetHeight(parent);
             return true;
+        }
+
+        private Node ReplaceParent(Node parent, int valueToCompare, Node replacedNode)
+        {
+            if (parent == null)
+            {
+                return parent;
+            }
+            if (parent.Value <= valueToCompare)
+            {
+                parent.Right = replacedNode;
+            }
+            else
+            {
+                parent.Left = replacedNode;
+            }
+            return parent;
         }
 
         private Node FindMinInLeftSubTree(Node node)
@@ -271,12 +273,9 @@ namespace BinaryTrees
         /// </summary>
         /// <param name="node"></param>
         Node RotateRightLeft(Node node)
-        {// 83
+        {
             if (node == null) { return null; }
             var lostValue = node.Right.Left.Right;
-
-
-
             node.Right.Left.Right = node.Right;
             node.Right.Left.Parent = node.Right.Parent;
             node.Right = node.Right.Left;

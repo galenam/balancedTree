@@ -34,6 +34,7 @@ namespace TestProject
         [TestCase(7, true, "5 3 2 1 4 8 6")]
         public void Test1(int removedValue, bool removingResult, string printedBTree)
         {
+            // после рефакторинга отвалилось 7 тестов, откатить, проверить, особенно последнюю строку
             var result = BTree.Remove(removedValue);
             Assert.AreEqual(result, removingResult);
             Assert.AreEqual(BTree.Print(), printedBTree);
