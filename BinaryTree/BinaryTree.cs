@@ -285,5 +285,30 @@ namespace BinaryTrees
             node.Right.Height = GetHeight(node.Right);
             return RotateRightRight(node);
         }
+
+        private int? MinMax(Predicate<Node> condition, Func<Node, Node> func)
+        {
+            if (Root == null) { return null; }
+            var node = Root;
+            while (node != null)
+            {
+                if (condition(node))
+                { node = func(node); }
+                else
+                { break; }
+            }
+            return node?.Value;
+
+        }
+
+        public int? Max()
+        {
+            return MinMax(node => node.Right != null, node => node.Right);
+        }
+
+        public int? Min()
+        {
+            return MinMax(node => node.Left != null, node => node.Left);
+        }
     }
 }

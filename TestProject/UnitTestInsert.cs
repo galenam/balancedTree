@@ -21,21 +21,10 @@ namespace TestProject
         public void Test1(Tuple<List<int>, string> data)
         {
             var bTree = new BinaryTree();
-            var inserted = InsertFromIEnumerable(bTree, data.Item1);
+            var inserted = TestBase.InsertFromIEnumerable(bTree, data.Item1);
             Assert.True(inserted);
             var resultTest = bTree.Print();
             Assert.AreEqual(resultTest, data.Item2);
-        }
-
-        bool InsertFromIEnumerable(BinaryTree bTree, IEnumerable<int> values)
-        {
-            if (bTree == null || !values.Any()) return false;
-            foreach (var value in values)
-            {
-                bTree.Insert(value);
-            }
-
-            return true;
         }
     }
 }
